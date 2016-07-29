@@ -4,7 +4,7 @@ QT -= gui
 CONFIG += console c++14
 CONFIG -= app_bundle
 
-include(pandoc-workflow/pandoc-workflow.pri)
+include(pandoc-slave/pandoc-slave.pri)
 
 TARGET = pandoc-slave
 
