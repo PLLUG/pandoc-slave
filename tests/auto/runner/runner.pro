@@ -14,6 +14,6 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+include(../../../pandoc-slave/pandoc-slave/pandoc-slave.pri)
 
 SOURCES += tst_runnertest.cpp
-DEFINES += SRCDIR=\\\"$$PWD/\\\"
