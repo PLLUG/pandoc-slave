@@ -73,6 +73,8 @@ public:
 
     PandocRunner(QString &pandocExePath, QObject* parent = 0);
 
+    QStringList params() const;
+    QString fromFormat(PandocFormat format) const;
     int statusCode() const;
     QString content();
     QString error();

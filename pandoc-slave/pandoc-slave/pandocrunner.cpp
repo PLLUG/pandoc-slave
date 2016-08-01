@@ -18,6 +18,11 @@ PandocRunner::PandocRunner(QString &pandocExePath, QObject* parent):
     initializeConnections();
 }
 
+QStringList PandocRunner::params() const
+{
+    return mParams;
+}
+
 void PandocRunner::run(PandocFormat from, PandocFormat to, const QString &file)
 {
     buildParams(from, to, file);
@@ -75,10 +80,17 @@ QString PandocRunner::pandocExePath() const
     return mPandocExePath;
 }
 
+
+QString PandocRunner::fromFormat(PandocRunner::PandocFormat format) const
+{
+    return QString(mMetaEnum.valueToKey(format)).toLower();
+}
+
 void PandocRunner::buildParams(PandocRunner::PandocFormat from, PandocRunner::PandocFormat to)
 {
-    mParams << QString("-f") << QString(mMetaEnum.valueToKey(from)).toLower();
-    mParams << QString("-t") << QString(mMetaEnum.valueToKey(to)).toLower();
+    mParams.clear();
+    mParams << QString("-f") << fromFormat(from);
+    mParams << QString("-t") << fromFormat(to);
 }
 
 void PandocRunner::buildParams(PandocFormat from, PandocFormat to, const QString &file)
