@@ -1,3 +1,6 @@
+# This folder contains pandoc.exe file for development
+pandoc/pandoc*
+
 # C++ objects and libs
 
 *.slo
