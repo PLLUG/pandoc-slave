@@ -1,8 +1,6 @@
 #include "paramsbuilder.h"
 
-PandocSlave::ParamsBuilder::ParamsBuilder(QObject *parent) :
-    QObject(parent)
-  , mError("")
+PandocSlave::ParamsBuilder::ParamsBuilder(QObject *parent) : QObject(parent)
 {
     initializeKeys();
 
