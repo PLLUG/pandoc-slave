@@ -1,7 +1,9 @@
 HEADERS += \
-    $$PWD/pandocrunner.h
+    $$PWD/pandocrunner.h \
+    $$PWD/paramsbuilder.h
 
 SOURCES += \
-    $$PWD/pandocrunner.cpp
+    $$PWD/pandocrunner.cpp \
+    $$PWD/paramsbuilder.cpp
 
 INCLUDEPATH += $$PWD
