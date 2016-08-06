@@ -14,6 +14,9 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+include(../includes/default.pri)
 include(../../../pandoc-slave/pandoc-slave/pandoc-slave.pri)
 
 SOURCES += tst_runnertest.cpp
+
+DISTFILES +=

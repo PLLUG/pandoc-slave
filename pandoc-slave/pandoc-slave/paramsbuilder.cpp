@@ -1,8 +1,6 @@
 #include "paramsbuilder.h"
 
-PandocSlave::ParamsBuilder::ParamsBuilder(QObject *parent) :
-    QObject(parent)
-  , mError("")
+PandocSlave::ParamsBuilder::ParamsBuilder(QObject *parent) : QObject(parent)
 {
     initializeKeys();
 
@@ -38,7 +36,7 @@ void PandocSlave::ParamsBuilder::addParam(PandocKeys key, const QString &value)
     {
         mParams << fromKeys(key);
     }
-    if (value != "")
+    if (!value.isEmpty())
     {
         mParams << value;
     }
