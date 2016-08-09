@@ -3,103 +3,98 @@
 #include <QStringList>
 #include <QProcess>
 
-
-PandocRunner::PandocRunner(QString &pandocExePath, QObject* parent):
+PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, QObject* parent):
     QObject(parent)
   , mContent("")
   , mError("")
   , mStatusCode(0)
   , mPandocExePath(pandocExePath)
 {
-    mMetaEnum = QMetaEnum::fromType<PandocFormat>();
-
     mProcess = new QProcess(this);
 
     initializeConnections();
 }
 
-QStringList PandocRunner::params() const
+PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, const QStringList &params, QObject *parent)
+{
+    PandocRunner(pandocExePath, parent);
+    mParams = params;
+}
+
+QStringList PandocSlave::PandocRunner::params() const
 {
     return mParams;
 }
 
-void PandocRunner::run(PandocFormat from, PandocFormat to, const QString &file)
+void PandocSlave::PandocRunner::setParams(const QStringList &params)
 {
-    buildParams(from, to, file);
-
-    mProcess->start(mPandocExePath, mParams);
+    mParams = params;
 }
 
-void PandocRunner::run(PandocRunner::PandocFormat from, PandocRunner::PandocFormat to, const QByteArray &buffer)
+void PandocSlave::PandocRunner::run(const QStringList &params)
 {
-    buildParams(from, to);
+    mProcess->start(mPandocExePath, params);
+}
 
-    mProcess->start(mPandocExePath, mParams);
+void PandocSlave::PandocRunner::run()
+{
+    run(mParams);
+}
+
+void PandocSlave::PandocRunner::run(const QStringList &params, const QByteArray &buffer)
+{
+    mProcess->start(mPandocExePath, params);
     mProcess->write(buffer);
     mProcess->closeWriteChannel();
 }
 
-int PandocRunner::statusCode() const
+void PandocSlave::PandocRunner::run(QByteArray &buffer)
+{
+    run(mParams, buffer);
+}
+
+int PandocSlave::PandocRunner::statusCode() const
 {
     return mStatusCode;
 }
 
-void PandocRunner::finishedProcess(int exitCode)
+void PandocSlave::PandocRunner::finishedProcess(int exitCode)
 {
     mStatusCode = exitCode;
     emit finished(exitCode);
 }
 
-void PandocRunner::readyReadOutput()
+void PandocSlave::PandocRunner::readyReadOutput()
 {
     mContent = QString(mProcess->readAllStandardOutput());
 }
 
-void PandocRunner::readyReadError()
+void PandocSlave::PandocRunner::readyReadError()
 {
     mError = QString(mProcess->readAllStandardError());
 }
 
-QString PandocRunner::content()
+QString PandocSlave::PandocRunner::content()
 {
     return mContent;
 }
 
-QString PandocRunner::error()
+QString PandocSlave::PandocRunner::error()
 {
     return mError;
 }
 
-void PandocRunner::setPandocExePath(const QString &path)
+void PandocSlave::PandocRunner::setPandocExePath(const QString &path)
 {
     mPandocExePath = path;
 }
 
-QString PandocRunner::pandocExePath() const
+QString PandocSlave::PandocRunner::pandocExePath() const
 {
     return mPandocExePath;
 }
 
-
-QString PandocRunner::fromFormat(PandocRunner::PandocFormat format) const
-{
-    return QString(mMetaEnum.valueToKey(format)).toLower();
-}
-
-void PandocRunner::buildParams(PandocRunner::PandocFormat from, PandocRunner::PandocFormat to)
-{
-    mParams.clear();
-    mParams << QString("-f") << fromFormat(from);
-    mParams << QString("-t") << fromFormat(to);
-}
-
-void PandocRunner::buildParams(PandocFormat from, PandocFormat to, const QString &file)
-{
-    buildParams(from, to);
-    mParams << file;
-}
-
-void PandocRunner::initializeConnections()
+void PandocSlave::PandocRunner::initializeConnections()
 {
     connect(mProcess, SIGNAL(finished(int)), this, SLOT(finishedProcess(int)));
     connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readyReadOutput()));
