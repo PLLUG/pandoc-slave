@@ -66,6 +66,7 @@ void PandocSlave::ParamsBuilder::initializeKeys()
 {
     mKeys["from"] = "-f";
     mKeys["to"] = "-t";
+    mKeys["output"] = "-o";
     mKeys["standalone"] = "-s";
     mKeys["empty"] = "";
 }

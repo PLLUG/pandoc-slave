@@ -42,7 +42,7 @@ namespace PandocSlave
  *
  *  // before use parameters
  *  QString builderError = builder.error();
- *  if (builderError.isEmpty())
+ *  if (!builderError.isEmpty())
  *  {
  *      qDebug() << builderError;
  *  }
@@ -69,6 +69,7 @@ public:
     enum PandocKeys {
         from,
         to,
+        output,
         standalone,
         empty
     };
