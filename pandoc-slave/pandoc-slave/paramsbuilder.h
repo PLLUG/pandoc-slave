@@ -85,6 +85,8 @@ public:
     void setParams(QStringList params);
     QString toString() const;
     QString error() const;
+    void setError(const QString &msg);
+    void clear();
 
 signals:
 

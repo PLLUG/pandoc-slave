@@ -21,18 +21,20 @@ QString PandocSlave::ParamsBuilder::fromKeys(PandocKeys key) const
 
 void PandocSlave::ParamsBuilder::addParam(PandocKeys key, PandocFormat format)
 {
-    if (key == PandocKeys::empty)
+    if (key == ParamsBuilder::empty)
     {
-        mError = "Not allowed parameters combination: "
-                "PandocKeys::empty and PandocFormat::" +
-                fromFormat(format);
+        QString msg = QString("%1 and %2")
+                .arg(fromKeys(key))
+                .arg(fromFormat(format));
+        setError(msg);
     }
     mParams << fromKeys(key) << fromFormat(format);
 }
 
 void PandocSlave::ParamsBuilder::addParam(PandocKeys key, const QString &value)
 {
-    if (key != PandocKeys::empty)
+
+    if (key != ParamsBuilder::empty)
     {
         mParams << fromKeys(key);
     }
@@ -60,6 +62,17 @@ QString PandocSlave::ParamsBuilder::toString() const
 QString PandocSlave::ParamsBuilder::error() const
 {
     return mError;
+}
+
+void PandocSlave::ParamsBuilder::setError(const QString &msg)
+{
+    mError = QString("Not allowed parameters combination: %1").arg(msg);
+}
+
+void PandocSlave::ParamsBuilder::clear()
+{
+    mParams.clear();
+    mError = "";
 }
 
 void PandocSlave::ParamsBuilder::initializeKeys()
