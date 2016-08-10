@@ -18,7 +18,7 @@ namespace PandocSlave
  * Usage:
  * \code{.cpp}
  *
- *  use namespace PandocSlave;
+ *  using namespace PandocSlave;
  *
  *  QString pandocExePath = "path/to/pandoc/executable/file";
  *  QString inputFile = "path/to/input/file";
@@ -59,8 +59,8 @@ class PandocRunner : public QObject
 
 public:
 
-    PandocRunner(const QString &pandocExePath, QObject* parent = 0);
     PandocRunner(const QString &pandocExePath, const QStringList &params, QObject* parent = 0);
+    PandocRunner(const QString &pandocExePath, QObject* parent = 0);
 
     QStringList params() const;
     void setParams(const QStringList &params);

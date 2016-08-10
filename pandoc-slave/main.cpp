@@ -60,7 +60,8 @@ int main(int argc, char *argv[])
     }
     else
     {
-        PandocRunner* runner_two = new PandocRunner(pandocExePath, builder_two.params());
+        PandocRunner* runner_two = new PandocRunner(pandocExePath);
+        runner_two->setParams(builder_two.params());
 
         QObject::connect(runner_two, &PandocRunner::finished, [=](int statusCode){
             if (statusCode != 0)

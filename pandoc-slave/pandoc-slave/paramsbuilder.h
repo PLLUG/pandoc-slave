@@ -15,7 +15,6 @@ namespace PandocSlave
  *
  * Usage:
  *
- *
  *  \code{cpp}
  *
  *  ParamsBuilder builder;

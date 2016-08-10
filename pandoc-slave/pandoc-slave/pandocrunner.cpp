@@ -3,22 +3,23 @@
 #include <QStringList>
 #include <QProcess>
 
-PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, QObject* parent):
+PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, const QStringList &params, QObject *parent) :
     QObject(parent)
   , mContent("")
   , mError("")
   , mStatusCode(0)
   , mPandocExePath(pandocExePath)
+  , mParams(params)
 {
     mProcess = new QProcess(this);
 
     initializeConnections();
 }
 
-PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, const QStringList &params, QObject *parent) :
-     PandocRunner(pandocExePath, parent)
+PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, QObject* parent):
+    PandocRunner(pandocExePath, QStringList(), parent)
 {
-    mParams = params;
+
 }
 
 QStringList PandocSlave::PandocRunner::params() const
