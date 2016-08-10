@@ -54,6 +54,7 @@ void BuilderTest::test_addParamFormat()
 
 void BuilderTest::test_addParamValue()
 {
+    mBuilder.clear();
     mBuilder.addParam(ParamsBuilder::empty, "value");
 
     QCOMPARE(mBuilder.toString(), QString("value"));
@@ -61,6 +62,7 @@ void BuilderTest::test_addParamValue()
 
 void BuilderTest::test_addParamKey()
 {
+    mBuilder.clear();
     mBuilder.addParam(ParamsBuilder::standalone, "");
 
     QCOMPARE(mBuilder.toString(), QString("-s"));
@@ -68,8 +70,8 @@ void BuilderTest::test_addParamKey()
 
 void BuilderTest::test_builderError()
 {
-    mBuilder.addParam(ParamsBuilder::from, "");
-    mBuilder.addParam(ParamsBuilder::to, "");
+    mBuilder.clear();
+    mBuilder.addParam(ParamsBuilder::empty, ParamsBuilder::Markdown);
 
     QVERIFY(!mBuilder.error().isEmpty());
 }
