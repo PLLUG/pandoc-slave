@@ -14,61 +14,67 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    ParamsBuilder builder;
+    QString projFolder = QCoreApplication::applicationDirPath();
+    QString pandocExePath = QDir(projFolder).filePath("../../pandoc/pandoc.exe");
 
-//    qDebug() << builder.fromFormat(ParamsBuilder::Markdown);
-//    qDebug() << builder.fromKeys(ParamsBuilder::from);
+    QString inputFile = QDir(projFolder).filePath("../../test-input-files/input.md");
 
-    builder.addParam(ParamsBuilder::from, ParamsBuilder::Markdown);
-    builder.addParam(ParamsBuilder::to, ParamsBuilder::HTML);
-    builder.addParam(ParamsBuilder::empty, ParamsBuilder::Markdown_Github);
-    builder.addParam(ParamsBuilder::empty, "some_value");
-    builder.addParam(ParamsBuilder::standalone, "");
+    ParamsBuilder builder_one;
+    builder_one.addParam(ParamsBuilder::empty, inputFile);
+    builder_one.addParam(ParamsBuilder::from, ParamsBuilder::Markdown);
+    builder_one.addParam(ParamsBuilder::to, ParamsBuilder::HTML);
 
-    QString builderError = builder.error();
-
-    if (builderError.isEmpty())
-    {
-        qDebug() << builder.toString();
-    }
-    else
+    QString builderError = builder_one.error();
+    if (!builderError.isEmpty())
     {
         qDebug() << builderError;
     }
+    else
+    {
+        PandocRunner* runner_one = new PandocRunner(pandocExePath, builder_one.params());
 
-//    QString projFolder = QCoreApplication::applicationDirPath();
-//    QString pandocExePath = QDir(projFolder).filePath("../../pandoc/pandoc.exe");
+        QObject::connect(runner_one, &PandocRunner::finished, [=](int statusCode){
+            if (statusCode != 0)
+            {
+                qDebug() << "ERROR:" << runner_one->error();
+            }
+            else
+            {
+                qDebug() << runner_one->content();
+            }
+        });
 
-//    QString inputFile = QDir(projFolder).filePath("../../test-input-files/input.md");
-//    QString input("# Hi all");
+        runner_one->run();
+    }
 
-//    PandocRunner* runner_one = new PandocRunner(pandocExePath);
-//    PandocRunner* runner_two = new PandocRunner(pandocExePath);
+    QString input("# Hi all");
 
-//    QObject::connect(runner_one, &PandocRunner::finished, [=](int statusCode){
-//        if (statusCode != 0)
-//        {
-//            qDebug() << "ERROR:" << runner_one->error();
-//        }
-//        else
-//        {
-//            qDebug() << runner_one->content();
-//        }
-//    });
+    ParamsBuilder builder_two;
+    builder_two.addParam(ParamsBuilder::from, ParamsBuilder::Markdown);
+    builder_two.addParam(ParamsBuilder::to, ParamsBuilder::HTML);
 
-//    QObject::connect(runner_two, &PandocRunner::finished, [=](int statusCode){
-//        if (statusCode != 0)
-//        {
-//            qDebug() << "ERROR:" << runner_two->error();
-//        }
-//        else
-//        {
-//            qDebug() << runner_two->content();
-//        }
-//    });
+    builderError = builder_two.error();
+    if (!builderError.isEmpty())
+    {
+        qDebug() << builderError;
+    }
+    else
+    {
+        PandocRunner* runner_two = new PandocRunner(pandocExePath, builder_two.params());
 
-//    runner_one->run(PandocRunner::Markdown, PandocRunner::HTML, inputFile);
-//    runner_two->run(PandocRunner::Markdown, PandocRunner::HTML, input.toUtf8());
+        QObject::connect(runner_two, &PandocRunner::finished, [=](int statusCode){
+            if (statusCode != 0)
+            {
+                qDebug() << "ERROR:" << runner_two->error();
+            }
+            else
+            {
+                qDebug() << runner_two->content();
+            }
+        });
+
+        runner_two->run(input.toUtf8());
+    }
 
     return a.exec();
 }

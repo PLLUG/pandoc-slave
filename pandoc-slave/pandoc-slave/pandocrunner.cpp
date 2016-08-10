@@ -15,9 +15,9 @@ PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, QObject* p
     initializeConnections();
 }
 
-PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, const QStringList &params, QObject *parent)
+PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, const QStringList &params, QObject *parent) :
+     PandocRunner(pandocExePath, parent)
 {
-    PandocRunner(pandocExePath, parent);
     mParams = params;
 }
 
@@ -48,7 +48,7 @@ void PandocSlave::PandocRunner::run(const QStringList &params, const QByteArray 
     mProcess->closeWriteChannel();
 }
 
-void PandocSlave::PandocRunner::run(QByteArray &buffer)
+void PandocSlave::PandocRunner::run(const QByteArray &buffer)
 {
     run(mParams, buffer);
 }

@@ -18,6 +18,38 @@ namespace PandocSlave
  * Usage:
  * \code{.cpp}
  *
+ *  use namespace PandocSlave;
+ *
+ *  QString pandocExePath = "path/to/pandoc/executable/file";
+ *  QString inputFile = "path/to/input/file";
+ *
+ *  ParamsBuilder builder;
+ *  builder.addParam(ParamsBuilder::empty, inputFile);
+ *  builder.addParam(ParamsBuilder::from, ParamsBuilder::Markdown);
+ *  builder.addParam(ParamsBuilder::to, ParamsBuilder::HTML);
+ *
+ *  QString builderError = builder.error();
+ *  if (!builderError.isEmpty())
+ *  {
+ *      qDebug() << builderError;
+ *  }
+ *  else
+ *  {
+ *      PandocRunner* runner = new PandocRunner(pandocExePath, builder.params());
+ *
+ *      QObject::connect(runner, &PandocRunner::finished, [=](int statusCode){
+ *          if (statusCode != 0)
+ *          {
+ *              qDebug() << "ERROR:" << runner_one->error();
+ *          }
+ *          else
+ *          {
+ *              qDebug() << runner->content();
+ *          }
+ *      });
+ *
+ *      runner->run();
+ *  }
  *
  * \endcode
  */
@@ -40,7 +72,7 @@ public:
 
     void run();
     void run(const QStringList &params);
-    void run(QByteArray &buffer);
+    void run(const QByteArray &buffer);
     void run(const QStringList &params, const QByteArray &buffer);
 
 signals:

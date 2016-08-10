@@ -6,7 +6,7 @@ Hovewer you can use it in any other projects.
 ## Dependencies
 In order to use this project you must have installed pandoc in system. Read
 [pandoc official documentation](http://pandoc.org/installing.html) how do this. After installind copy pandoc.exe
-file to pandoc folder. This instance use for runing project.
+file to `pandoc` folder. This instance use for runing project.
 
 ## Usage as submodule
 Important step for use project, understanding how
@@ -26,12 +26,18 @@ builder.addParam(ParamsBuider::output, "path/to/output.html");
 
 qDebug() << builder.toString();
 ```
-This code produce and print following parameters string ([see here for more information about parameters](http://pandoc.org/installing.html)):
+This code produce and print following parameters string ([see here for more information about pandoc parameters](http://pandoc.org/installing.html)):
 ```
 path/to/input.md -f markdown -t html -o path/to/output.html
 ```
 Next step, use `builder` instance in `PandocRunner` class. For example:
 ```c++
-use
+use namespace PandocSlave;
+...
+QString pandocExePath = "path/to/pandoc.exe";
+
+PandocRunner runner(pandocExePath, builder.params());
+runner.run();
 ```
 
+Happy codding.
