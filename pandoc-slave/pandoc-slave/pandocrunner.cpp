@@ -5,8 +5,6 @@
 
 PandocSlave::PandocRunner::PandocRunner(const QString &pandocExePath, const QStringList &params, QObject *parent) :
     QObject(parent)
-  , mContent("")
-  , mError("")
   , mStatusCode(0)
   , mPandocExePath(pandocExePath)
   , mParams(params)
