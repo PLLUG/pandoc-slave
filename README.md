@@ -57,7 +57,8 @@ runner.run();
 |`ParamsBuilder::to`|Presentation of `-t` pandoc parameter.|
 |`ParamsBuilder::output`|Presentation of `-o` pandoc parameter.|
 |`ParamsBuilder::standalone`|Presentation of `-s` pandoc parameter.|
-|`ParamsBuilder::template_file`|Presentation of `--template` pandoc parameters.|
+|`ParamsBuilder::template_file`|Presentation of `--template` pandoc parameter.|
+|`ParamsBuilder::metadata`|Presentation of `--metadata` pandoc parameter.|
 
 ### Pandoc template engine
 Imagine we have following `input.md` file with content:
