@@ -70,6 +70,8 @@ public:
         to,
         output,
         standalone,
+        template_file,
+        metadata,
         empty
     };
     Q_ENUM(PandocKeys)
@@ -86,6 +88,7 @@ public:
     QString toString() const;
     QString error() const;
     void setError(const QString &msg);
+    void raw(const QString &rawLine);
     void clear();
 
 signals:

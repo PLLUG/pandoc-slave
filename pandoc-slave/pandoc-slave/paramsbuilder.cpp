@@ -69,10 +69,18 @@ void PandocSlave::ParamsBuilder::setError(const QString &msg)
     mError = QString("Not allowed parameters combination: %1").arg(msg);
 }
 
+void PandocSlave::ParamsBuilder::raw(const QString &rawLine)
+{
+    if(!rawLine.isEmpty())
+    {
+        mParams = rawLine.trimmed().split(" ", QString::SkipEmptyParts);
+    }
+}
+
 void PandocSlave::ParamsBuilder::clear()
 {
     mParams.clear();
-    mError = "";
+    mError.clear();
 }
 
 void PandocSlave::ParamsBuilder::initializeKeys()
@@ -81,5 +89,7 @@ void PandocSlave::ParamsBuilder::initializeKeys()
     mKeys["to"] = "-t";
     mKeys["output"] = "-o";
     mKeys["standalone"] = "-s";
+    mKeys["template_file"] = "--template";
+    mKeys["metadata"] = "--metadata";
     mKeys["empty"] = "";
 }
