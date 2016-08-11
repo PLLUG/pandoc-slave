@@ -40,4 +40,72 @@ PandocRunner runner(pandocExePath, builder.params());
 runner.run();
 ```
 
+### Supported formats
+| Format        | Describe      |
+| ------------- | ------------- |
+|`ParamsBuilder::Markdown`|Simple markdown|
+|`ParamsBuilder::Markdown_Github`|Github markdown|
+|`ParamsBuilder::HTML`|HTML format|
+|`ParamsBuilder::Json`|Json format|
+
+
+### Supported pandoc parameters
+| Parameter | Describe |
+| --------- | -------- |
+|`ParamsBuilder::empty`|Use for presents parameter without key.|
+|`ParamsBuilder::from`|Presentation of `-f` pandoc parameter.|
+|`ParamsBuilder::to`|Presentation of `-t` pandoc parameter.|
+|`ParamsBuilder::output`|Presentation of `-o` pandoc parameter.|
+|`ParamsBuilder::standalone`|Presentation of `-s` pandoc parameter.|
+|`ParamsBuilder::template_file`|Presentation of `--template` pandoc parameters.|
+
+### Pandoc template engine
+Imagine we have following `input.md` file with content:
+```
+# Header
+```
+We want convert this file into `html` format using pandoc template engine.
+First of all we must have some template, for example, `template.html`:
+```html
+<root>
+$body$
+</root>
+```
+If we run following command:
+```
+pandoc input.md -f markdown -t html --template template.html
+```
+we get output content:
+```html
+<root>
+<h1 id="header">Header</h1>
+</root>
+```
+
+`$body$` template variable is predefined pandoc variable.
+But, we can define own variables. Value for this variables we can pass
+throught command line using parameter `--metadata`. Let's construct
+`ParamsBuilder` instance for using template:
+```c++
+using namespace PandocSlave;
+
+ParamsBuilder builder;
+builder.addParam(ParamsBuilder::empty, "path/to/input.md");
+builder.addParam(ParamsBuilder::from, ParamsBuilders::Markdown);
+builder.addParam(ParamsBuilder::to, ParamsBuilder::HTML);
+builder.addParam(ParamsBuilder::template_file, "path/to/template.html");
+builder.addParam(ParamsBuilder::metadata, "author:\"Author Name\"");
+```
+
+In example above `input.md` file:
+```
+# Header
+```
+and `template.html` file:
+```html
+<root author="$author$">
+$body$
+</root>
+```
+
 Happy codding.

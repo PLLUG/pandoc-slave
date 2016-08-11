@@ -33,6 +33,7 @@ void BuilderTest::test_checkPandocFormats()
     QCOMPARE(mBuilder.fromFormat(ParamsBuilder::Markdown), QString("markdown"));
     QCOMPARE(mBuilder.fromFormat(ParamsBuilder::Markdown_Github), QString("markdown_github"));
     QCOMPARE(mBuilder.fromFormat(ParamsBuilder::HTML), QString("html"));
+    QCOMPARE(mBuilder.fromFormat(ParamsBuilder::Json), QString("json"));
 }
 
 void BuilderTest::test_checkParamsKeys()
@@ -42,6 +43,8 @@ void BuilderTest::test_checkParamsKeys()
     QCOMPARE(mBuilder.fromKeys(ParamsBuilder::from), QString("-f"));
     QCOMPARE(mBuilder.fromKeys(ParamsBuilder::output), QString("-o"));
     QCOMPARE(mBuilder.fromKeys(ParamsBuilder::standalone), QString("-s"));
+    QCOMPARE(mBuilder.fromKeys(ParamsBuilder::template_file), QString("--template"));
+    QCOMPARE(mBuilder.fromKeys(ParamsBuilder::metadata), QString("--metadata"));
 }
 
 void BuilderTest::test_addParamFormat()
