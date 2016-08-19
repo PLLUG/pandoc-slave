@@ -1,7 +1,13 @@
 #include <QString>
 #include <QtTest>
+#include <QCoreApplication>
+#include <QDir>
+#include <QDebug>
 
 #include "pandocrunner.h"
+#include "paramsbuilder.h"
+
+using namespace PandocSlave;
 
 class RunnerTest : public QObject
 {
@@ -14,51 +20,71 @@ private Q_SLOTS:
     void initTestCase();
     void cleanupTestCase();
 
-    void test_build_parameters_without_file();
-    void test_build_parameters_with_file();
-    void test_check_pandoc_formats();
-
-private:
-    QString mPandocExePath;
-    PandocRunner* mRunner;
+    void test_initialState_1();
+    void test_initialState_2();
+    void test_set_get_params();
+    void test_set_get_pandocExePath();
 };
 
 RunnerTest::RunnerTest()
-{
-}
+{}
 
 void RunnerTest::initTestCase()
+{}
+
+void RunnerTest::test_initialState_1()
 {
-    mPandocExePath = "path/to/pandoc.exe";
-    mRunner = new PandocRunner(mPandocExePath);
+    QString pandocExePath = "path/to/pandoc.exe";
+    PandocRunner runner(pandocExePath);
+
+    QCOMPARE(pandocExePath, runner.pandocExePath());
+    QVERIFY(runner.params().size() == 0);
+    QVERIFY(runner.statusCode() == 0);
+    QVERIFY(runner.error().isEmpty());
+    QVERIFY(runner.content().isEmpty());
 }
 
-void RunnerTest::test_build_parameters_without_file()
+void RunnerTest::test_initialState_2()
 {
+    QString pandocExePath = "path/to/pandoc.exe";
+    QStringList params;
+    params << "String 1" << "String 2";
 
-    mRunner->buildParams(PandocRunner::PandocFormat::Markdown, PandocRunner::PandocFormat::HTML);
+    PandocRunner runner(pandocExePath, params);
 
-    QCOMPARE(mRunner->params().join(" "), QString("-f markdown -t html"));
+    QCOMPARE(pandocExePath, runner.pandocExePath());
+    QVERIFY(runner.params().size() == 2);
+    QVERIFY(runner.statusCode() == 0);
+    QVERIFY(runner.error().isEmpty());
+    QVERIFY(runner.content().isEmpty());
 }
 
-void RunnerTest::test_build_parameters_with_file()
+void RunnerTest::test_set_get_params()
 {
-    mRunner->buildParams(PandocRunner::PandocFormat::Markdown, PandocRunner::PandocFormat::HTML, "path/to/some/file");
+    QString pandocExePath = "path/to/pandoc.exe";
 
-    QCOMPARE(mRunner->params().join(" "), QString("-f markdown -t html path/to/some/file"));
+    PandocRunner runner(pandocExePath);
+    QStringList params;
+    params << "String 1" << "String 2";
+    runner.setParams(params);
+
+    QCOMPARE(params.join(" "), runner.params().join(" "));
 }
 
-void RunnerTest::test_check_pandoc_formats()
+void RunnerTest::test_set_get_pandocExePath()
 {
-    QCOMPARE(mRunner->fromFormat(PandocRunner::PandocFormat::Markdown), QString("markdown"));
-    QCOMPARE(mRunner->fromFormat(PandocRunner::PandocFormat::Markdown_Github), QString("markdown_github"));
-    QCOMPARE(mRunner->fromFormat(PandocRunner::PandocFormat::HTML), QString("html"));
+    QString pandocExePath = "path/to/pandoc.exe";
+
+    PandocRunner runner(pandocExePath);
+
+    QCOMPARE(pandocExePath, runner.pandocExePath());
+    runner.setPandocExePath("some path");
+    QCOMPARE(QString("some path"), runner.pandocExePath());
+
 }
 
 void RunnerTest::cleanupTestCase()
-{
-    delete mRunner;
-}
+{}
 
 QTEST_APPLESS_MAIN(RunnerTest)
 

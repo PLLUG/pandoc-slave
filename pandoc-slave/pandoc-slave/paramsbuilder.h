@@ -15,7 +15,6 @@ namespace PandocSlave
  *
  * Usage:
  *
- *
  *  \code{cpp}
  *
  *  ParamsBuilder builder;
@@ -42,7 +41,7 @@ namespace PandocSlave
  *
  *  // before use parameters
  *  QString builderError = builder.error();
- *  if (builderError.isEmpty())
+ *  if (!builderError.isEmpty())
  *  {
  *      qDebug() << builderError;
  *  }
@@ -69,7 +68,10 @@ public:
     enum PandocKeys {
         from,
         to,
+        output,
         standalone,
+        template_file,
+        metadata,
         empty
     };
     Q_ENUM(PandocKeys)
@@ -85,6 +87,9 @@ public:
     void setParams(QStringList params);
     QString toString() const;
     QString error() const;
+    void setError(const QString &msg);
+    void raw(const QString &rawLine);
+    void clear();
 
 signals:
 

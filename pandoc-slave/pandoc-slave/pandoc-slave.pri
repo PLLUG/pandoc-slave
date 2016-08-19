@@ -1,3 +1,5 @@
+CONFIG += c++14
+
 HEADERS += \
     $$PWD/pandocrunner.h \
     $$PWD/paramsbuilder.h
